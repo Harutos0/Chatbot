@@ -38,7 +38,7 @@ public class Magpie4
 		Scanner in = new Scanner (System.in);
 		String username = "";
 		//Q1
-		System.out.println("Hello, I'm your tennis mentor. What is your name?");
+		System.out.println("Hello again, I'm your tennis mentor. What is your name?");
 		String answer = in.nextLine();
 		username = answer;
 		//Q2
@@ -296,9 +296,6 @@ public class Magpie4
 		return "What makes you think that I " + restOfStatement + " you?";
 	}
 	
-	
-	
-	
 	private int findKeyword(String statement, String goal, int startPos)
 	{
 		String phrase = statement.trim();
@@ -375,11 +372,11 @@ public class Magpie4
 		}
 		else if (whichResponse == 5)
 		{
-			response = "Why did you start playing tennis?";
+			response = "Why did you start playing sport?";
 		}
 		else if (whichResponse == 6)
 		{
-			response = "Any tennis mentor?";
+			response = "Any mentor?";
 		}
 		else if (whichResponse == 7)
 		{
