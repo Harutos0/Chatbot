@@ -109,11 +109,10 @@ public class Magpie4
 				|| findKeyword(statement, "ok") >= 0
 				|| findKeyword(statement, "okay") >= 0
 				|| findKeyword(statement, "k") >= 0)
-		{			
+		{
 			introduction();
 			response = "Who's your favorite notable men's singles tennis player?";
 			num1 = 1;
-		
 		}
 		else if (findKeyword(statement, "Carlos Alcaraz") >= 0
 				|| findKeyword(statement, "Rafael Nadal") >= 0
@@ -131,57 +130,69 @@ public class Magpie4
 				|| findKeyword(statement, "Jimmy Connors") >= 0
 				|| findKeyword(statement, "Ken Rosewall") >= 0
 				|| findKeyword(statement, "John McEnroe") >= 0
-				|| findKeyword(statement, "Ivan Lendl") >= 0)
+				|| findKeyword(statement, "Ivan Lendl") >= 0
+				|| findKeyword(statement, "Roger Federer") >= 0)
 		{
 			response = "Tell me about him.";
 			num = 1;
 			num1 = 0;
 		}
-		else if (num == 1)
+		else if (num ==1)
 		{
 			response = "What's his specialty?";
-			num++;
+			num ++;
 		}
-		else if (num == 2)
+		else if (num ==2)
 		{
 			response = "Any memorable matches?";
-			num++;
+			num ++;
 		}
-		else if (num == 3)
+		else if (num ==3)
 		{
 			response = "Say something cool";
-			num++;
+			num ++;
 		}
-		else if (num == 4)
+		else if (num ==4)
 		{
 			response = "What do you mean by \"" + statement + "\"?";
+			num ++;
+		}
+		else if (num ==5)
+		{
+			response = "Any other sports you like?";
 			num = 0;
 		}
-		else if (num1 == 1)
+		else if (num1 ==1)
 		{
 			response = "Can you explain who \"" + statement + "\" is?";
-			num1++;
+			num1 ++;
 		}
-		else if (num1 == 2)
+		else if (num1 ==2)
 		{
 			response = "What's that person's specialty?";
-			num1++;
+			num1 ++;
 		}
-		else if (num1 == 3)
+		else if (num1 ==3)
 		{
 			response = "Any memorable matches?";
-			num1++;
+			num1 ++;
 		}
-		else if (num1 == 4)
+		else if (num1 ==4)
 		{
 			response = "Say something cool";
-			num1++;
+			num1 ++;
 		}
-		else if (num1 == 5)
+		else if (num1 ==5)
 		{
 			response = "What do you mean by \"" + statement + "\"?";
+			num1 ++;
+		}
+		else if (num1 ==6)
+		{
+			response = "Any other sports you like?";
 			num1 = 0;
 		}
+
 
 		// Responses which require transformations
 		else if (findKeyword(statement, "I want to", 0) >= 0)
@@ -194,10 +205,6 @@ public class Magpie4
 			response = transformILike(statement);
 		}
 
-		else if (findKeyword(statement, "I like", 0) >= 0)
-		{
-			response = transformILike(statement);
-		}
 
 		else
 		{
