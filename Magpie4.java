@@ -10,6 +10,7 @@
  * @version April 2012
  *
  */
+import java.util.Scanner;
 
 public class Magpie4
 {
@@ -29,8 +30,63 @@ public class Magpie4
 	 *            the user statement
 	 * @return a response based on the rules given
 	 */
-	int num = 0;
-	int num1 = 0;
+	int num = 0;  //when user answers the correct name
+	int num1 = 0; //when user didn't answers the correct name
+
+	public void introduction()
+	{
+		Scanner in = new Scanner (System.in);
+		String username = "";
+		//Q1
+		System.out.println("Hello, I'm your tennis mentor. What is your name?");
+		String answer = in.nextLine();
+		username = answer;
+		//Q2
+		System.out.println("How are you doing today " + username + "?");
+		answer = in.nextLine().toLowerCase();
+		if (findKeyword(answer, "good") >= 0
+			|| findKeyword(answer, "great") >= 0
+			|| findKeyword(answer, "ok") >= 0
+			|| findKeyword(answer, "fine") >= 0
+			|| findKeyword(answer, "well") >= 0
+			|| findKeyword(answer, "calm") >= 0
+			|| findKeyword(answer, "joyful") >= 0
+			|| findKeyword(answer, "happy") >= 0)
+		{
+			System.out.println("That's great to hear!");
+		}
+		else if (findKeyword(answer, "angry") >= 0
+			|| findKeyword(answer, "bad") >= 0
+			|| findKeyword(answer, "annoyed") >= 0
+			|| findKeyword(answer, "sad") >= 0
+			|| findKeyword(answer, "depress") >= 0
+			|| findKeyword(answer, "horrible") >= 0
+			|| findKeyword(answer, "gloomy") >= 0
+			|| findKeyword(answer, "hopeless") >= 0)
+		{
+			System.out.println("Sorry to hear that, I hope you have a better day tomorrow.");
+		}
+		else 
+		{
+			System.out.println("I see...");
+		}
+
+		//Q3
+		 System.out.println("Which sport do you like?");
+		 answer = in.nextLine().toLowerCase();
+		if (findKeyword(answer, "tennis") >= 0)
+		{
+			System.out.println("Really? I like tennis too!");
+		}
+		else
+		{
+			System.out.println("I don't know much about " + answer + ". Do you want to talk about tennis instead?");
+			answer = in.nextLine().toLowerCase();
+		}
+
+		 //Q4
+	}
+
 	public String getResponse(String statement)
 	{
 		String response = "";
@@ -53,9 +109,11 @@ public class Magpie4
 				|| findKeyword(statement, "ok") >= 0
 				|| findKeyword(statement, "okay") >= 0
 				|| findKeyword(statement, "k") >= 0)
-		{
+		{			
+			introduction();
 			response = "Who's your favorite notable men's singles tennis player?";
 			num1 = 1;
+		
 		}
 		else if (findKeyword(statement, "Carlos Alcaraz") >= 0
 				|| findKeyword(statement, "Rafael Nadal") >= 0
@@ -79,47 +137,47 @@ public class Magpie4
 			num = 1;
 			num1 = 0;
 		}
-		else if (num ==1)
+		else if (num == 1)
 		{
 			response = "What's his specialty?";
-			num = 2;
+			num++;
 		}
-		else if (num ==2)
+		else if (num == 2)
 		{
 			response = "Any memorable matches?";
-			num = 3;
+			num++;
 		}
-		else if (num ==3)
+		else if (num == 3)
 		{
 			response = "Say something cool";
-			num = 4;
+			num++;
 		}
-		else if (num ==4)
+		else if (num == 4)
 		{
 			response = "What do you mean by \"" + statement + "\"?";
 			num = 0;
 		}
-		else if (num1 ==1)
+		else if (num1 == 1)
 		{
 			response = "Can you explain who \"" + statement + "\" is?";
-			num1 = 2;
+			num1++;
 		}
-		else if (num1 ==2)
+		else if (num1 == 2)
 		{
 			response = "What's that person's specialty?";
-			num1 = 3;
+			num1++;
 		}
-		else if (num1 ==3)
+		else if (num1 == 3)
 		{
 			response = "Any memorable matches?";
-			num1 = 4;
+			num1++;
 		}
-		else if (num1 ==4)
+		else if (num1 == 4)
 		{
 			response = "Say something cool";
-			num1 = 5;
+			num1++;
 		}
-		else if (num1 ==5)
+		else if (num1 == 5)
 		{
 			response = "What do you mean by \"" + statement + "\"?";
 			num1 = 0;
