@@ -11,6 +11,15 @@
  *
  */
 import java.util.Scanner;
+import java.util.Scanner;
+import java.io.File;
+import java.util.HashMap;
+import java.util.ArrayList;
+import java.util.Random;
+import java.io.*;
+import java.util.*;
+import java.util.function.Supplier;
+import java.util.Random;
 
 public class Magpie4
 {
@@ -18,18 +27,74 @@ public class Magpie4
 	 * Get a default greeting 	
 	 * @return a greeting
 	 */	
+
+	private Boolean state0, state1, state2, state3, state4;
+	int currState=0;
+
+	public Magpie4(){
+		state1 = false;
+		state2 = false;
+		state3 = false;
+		state4 = false;
+		
+		state0=true; // initial state
+		currState=0;
+	}
+
+	public void stateMachine(){
+		while(currState != 5){
+			currState=getState();
+			setState(currState);
+		}
+	}
+
+	private int getState(){
+		int nextState=0;
+		while (nextState<1 || nextState>5){
+		  Scanner scan = new Scanner(System.in);  // Create a Scanner object
+		  System.out.println("Enter next state (1-4), 5 to end: ");
+	
+		  nextState = scan.nextInt();  // Read user input
+		}
+		return nextState;
+	}
+	
+	private void setState(int currState){
+		state1=false;
+		state2=false;
+		state3=false;
+		state4=false;
+
+		switch(currState) {
+			case 1:
+			  state1=true;
+			  System.out.println("Setting state 1 true");
+			  break;
+			case 2:
+			  state2=true;
+			  System.out.println("Setting state 2 true");
+			  break;
+			case 3:
+			  state3=true;
+			  System.out.println("Setting state 3 true");
+			  break;
+			case 4:
+			  state4=true;
+			  System.out.println("Setting state 4 true");
+			  break;
+			case 5:
+			  System.out.println("Done....");
+			  break;
+			default:
+				System.out.println("hi");
+		}
+	}
 	
 	public String getGreeting()
 	{
 		return "Hello, I'm a chatbot, and I'm here to have a chat with you. Wanna chat?";
 	}
-	/**
-	 * Gives a response to a user statement
-	 * 
-	 * @param statement
-	 *            the user statement
-	 * @return a response based on the rules given
-	 */
+
 	int num = 0;  //when user answers the correct name
 	int num1 = 0; //when user didn't answers the correct name
 
@@ -44,25 +109,15 @@ public class Magpie4
 		//Q2
 		System.out.println("How are you doing today " + username + "?");
 		answer = in.nextLine().toLowerCase();
-		if (findKeyword(answer, "good") >= 0
-			|| findKeyword(answer, "great") >= 0
-			|| findKeyword(answer, "ok") >= 0
-			|| findKeyword(answer, "fine") >= 0
-			|| findKeyword(answer, "well") >= 0
-			|| findKeyword(answer, "calm") >= 0
-			|| findKeyword(answer, "joyful") >= 0
-			|| findKeyword(answer, "happy") >= 0)
+		if (sentimentVal(answer) > 1)
 		{
 			System.out.println("That's great to hear!");
 		}
-		else if (findKeyword(answer, "angry") >= 0
-			|| findKeyword(answer, "bad") >= 0
-			|| findKeyword(answer, "annoyed") >= 0
-			|| findKeyword(answer, "sad") >= 0
-			|| findKeyword(answer, "depress") >= 0
-			|| findKeyword(answer, "horrible") >= 0
-			|| findKeyword(answer, "gloomy") >= 0
-			|| findKeyword(answer, "hopeless") >= 0)
+		else if (sentimentVal(answer) < 1 || sentimentVal(answer) > -1)
+		{
+			System.out.println("Neutral");
+		}
+		else if (sentimentVal(answer) < 1)
 		{
 			System.out.println("Sorry to hear that, I hope you have a better day tomorrow.");
 		}
@@ -396,6 +451,140 @@ public class Magpie4
 		}
 
 		return response;
+	}
+
+	private static HashMap<String, Double> sentiment = new HashMap<String, Double>();
+  private static ArrayList<String> posAdjectives = new ArrayList<String>();
+  private static ArrayList<String> negAdjectives = new ArrayList<String>();
+
+
+  private static final String SPACE = " ";
+
+  static {
+    try {
+      Scanner input = new Scanner(new File("cleanSentiment.csv"));
+      while (input.hasNextLine()) {
+        String[] temp = input.nextLine().split(",");
+        sentiment.put(temp[0], Double.parseDouble(temp[1]));
+        // System.out.println("added "+ temp[0]+", "+temp[1]);
+      }
+      input.close();
+    } catch (Exception e) {
+      System.out.println("Error reading or parsing cleanSentiment.csv");
+    }
+
+    // read in the positive adjectives in postiveAdjectives.txt
+    try {
+      Scanner input = new Scanner(new File("SimpleReview.txt"));
+      while (input.hasNextLine()) {
+        String temp = input.nextLine().trim();
+        String[] arrOfStr = temp.split(" ", -2);
+        System.out.println(arrOfStr);
+        // posAdjectives.add(temp);
+      }
+      input.close();
+    } catch (Exception e) {
+      System.out.println("Error reading or parsing postitiveAdjectives.txt\n" + e);
+    }
+    try {
+      Scanner input = new Scanner(new File("SimpleReview.txt"));
+      while (input.hasNextLine()) {
+        String temp = input.nextLine().trim();
+        String[] arrOfStr = temp.split(" ", -2);
+        System.out.println(arrOfStr);
+        // posAdjectives.add(temp);
+      }
+      input.close();
+    } catch (Exception e) {
+      System.out.println("Error reading or parsing postitiveAdjectives.txt\n" + e);
+    }
+
+    // read in the negative adjectives in negativeAdjectives.txt
+    try {
+      Scanner input = new Scanner(new File("negativeAdjectives.txt"));
+      while (input.hasNextLine()) {
+        negAdjectives.add(input.nextLine().trim());
+      }
+      input.close();
+    } catch (Exception e) {
+      System.out.println("Error reading or parsing negativeAdjectives.txt");
+    }
+  }
+
+  /**
+   * returns a string containing all of the text in fileName (including
+   * punctuation),
+   * with words separated by a single space
+   */
+  public static String textToString(String fileName) {
+    String temp = "";
+    try {
+      Scanner input = new Scanner(new File(fileName));
+
+      // add 'words' in the file to the string, separated by a single space
+      while (input.hasNext()) {
+        temp = temp + input.next() + " ";
+      }
+      input.close();
+
+    } catch (Exception e) {
+      System.out.println("Unable to locate " + fileName);
+    }
+    // make sure to remove any additional space that may have been added at the end
+    // of the string.
+    return temp.trim();
+  }
+
+  /**
+   * @returns the sentiment value of word as a number between -1 (very negative)
+   *          to 1 (very positive sentiment)
+   */
+  public static double sentimentVal(String word) {
+    try {
+      return sentiment.get(word.toLowerCase());
+    } catch (Exception e) {
+      return 0;
+    }
+  }
+
+  public static double totalSentiment(String fileName) {
+    List<String> arrayList = new ArrayList<>();
+    double score = 0;
+    try {
+      Scanner input = new Scanner(new File(fileName));
+      while (input.hasNextLine()) {
+        String temp = input.nextLine().trim();
+        String[] arrOfStr = temp.split(" ", 100000000);
+        for (String a : arrOfStr) {
+          if (a.substring(a.length()-1, a.length()).equals("!")){
+            a = a.substring(0, a.length()-1);
+            double temp1 = sentimentVal(a);
+            score += temp1*10;
+            // System.out.println(temp1*10);
+          }
+          else{
+            removePunctuations(a);
+            arrayList.add(a);
+          }
+          // System.out.println(a);
+        }
+      }
+      input.close();
+    }
+
+    catch (Exception e) {
+      System.out.println("Error reading or parsing postitiveAdjectives.txt\n" + e);
+    }
+
+    for (int i = 0; i < arrayList.size(); i++) {
+      score += sentimentVal(arrayList.get(i));
+      //System.out.println(score);
+    }
+    return score;
+  }
+
+  public static String removePunctuations(String source) {
+	return source.replaceAll("\\p{IsPunctuation}", "");
 	}
 
 }
