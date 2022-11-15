@@ -37,7 +37,7 @@ public class Magpie4
 		state3 = false;
 		state4 = false;
 		
-		state0=true; // initial state
+		state0 = true; // initial state
 		currState=0;
 	}
 
@@ -192,14 +192,14 @@ public class Magpie4
 		{
 			response = "Why so negative?";
 		}
-		else if (findKeyword(statement, "yes") >= 0
+		else if ((findKeyword(statement, "yes") >= 0
 				|| findKeyword(statement, "yeah") >= 0
 				|| findKeyword(statement, "yea") >= 0
 				|| findKeyword(statement, "ya") >= 0
 				|| findKeyword(statement, "sure") >= 0
 				|| findKeyword(statement, "ok") >= 0
 				|| findKeyword(statement, "okay") >= 0
-				|| findKeyword(statement, "k") >= 0 )
+				|| findKeyword(statement, "k") >= 0 ) && (num < 4))
 		{
 			if (start == 0){
 				introduction();
