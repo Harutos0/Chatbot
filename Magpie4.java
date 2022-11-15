@@ -68,19 +68,22 @@ public class Magpie4
 		switch(currState) {
 			case 1:
 			  state1=true;
+			  System.out.println("That's great to hear!");
 			  break;
 			case 2:
 			  state2=true;
+			  System.out.println("Not bad, I see.");
 			  break;
 			case 3:
 			  state3=true;
+			  System.out.println("Sorry to hear that, I hope you have a better day tomorrow.");
 			  Scanner in = new Scanner (System.in);
 			  System.out.println("Let's talk about your day. How was your day?");
 			  String answer = in.nextLine();
-			  if (sentimentVal(answer) > 0){
+			  if (totalSentiment(answer) > 0){
 				System.out.println("Oh that's good for you.");
 			  }
-			  else if (sentimentVal(answer) > 0){
+			  else if (totalSentiment(answer) > 0){
 				System.out.println("To make tomorrow a better day, we need to reflect what we should've done and what we shouldn't have done on that day before ending the day. So, let start that tonight.");
 			  }
 			  break;
@@ -88,11 +91,8 @@ public class Magpie4
 			  state4=true;
 			  System.exit(0);
 			  break;
-			case 5:
-			  System.out.println("Done....");
-			  break;
 			default:
-				System.out.println("hi");
+				System.out.println("");
 		}
 	}
 	
@@ -115,20 +115,20 @@ public class Magpie4
 		//Q2
 		System.out.println("How are you doing today " + username + "?");
 		answer = in.nextLine().toLowerCase();
-		if (sentimentVal(answer) > 1)
+		if (totalSentiment(answer) > 1)
 		{
 			setState(1);
-			System.out.println("That's great to hear!");
 		}
-		else if (sentimentVal(answer) < 0.4 || sentimentVal(answer) > -0.4)
+		else if (totalSentiment(answer) < 0.4 && totalSentiment(answer) > -0.4)
 		{
-			System.out.println("Not bad, I see.");
 			setState(2);
 		}
-		else if (sentimentVal(answer) < 1)
+		else if (totalSentiment(answer) < 1)
 		{
-			System.out.println("Sorry to hear that, I hope you have a better day tomorrow.");
 			setState(3);
+		}
+		else if (answer.equals("quit")){
+			setState(4);
 		}
 		else 
 		{
@@ -136,37 +136,51 @@ public class Magpie4
 		}
 
 		//Q3
+		System.out.println("Let's talk about sport.");
 		 System.out.println("Which sport do you like?");
 		 answer = in.nextLine().toLowerCase();
 		if (findKeyword(answer, "tennis") >= 0)
 		{
 			System.out.println("Really? I like tennis too!");
 		}
+		else if (answer.equals("quit")){
+			setState(4);
+		}
 		else
 		{
 			System.out.println("I don't know much about " + answer + ". Do you want to talk about tennis instead?");
 			answer = in.nextLine().toLowerCase();
-			if (sentimentVal(answer) <= 0)
+			if (totalSentiment(answer) < 0)
 			{
 				System.out.println("Why so negative?");
+				answer = in.nextLine().toLowerCase();
+				if (totalSentiment(answer) < 0)
+				{
+					System.out.println("We are talking about tennis");
+				}
+				else if (totalSentiment(answer) > 0)
+				{
+					System.out.println("You sound better now. Let's talk about tennis");
+				}
+				else{
+					System.out.println("I guess we're talking about tennis");
+				}
 			}
-			answer = in.nextLine().toLowerCase();
-			if (sentimentVal(answer) < 0)
-			{
-				System.out.println("We are talking about tennis");
+			else if (answer.equals("quit")){
+				setState(4);
 			}
-			else if (sentimentVal(answer) > 0)
-			{
-				System.out.println("You sound better now. Let's talk about tennis");
+			else{
+				System.out.println("");
 			}
 		}
 
 		 //Q4
 	}
-
+	int start = 0;
 	public String getResponse(String statement)
 	{
 		String response = "";
+		
 		if (statement.length() == 0)
 		{
 			response = "Say something, please.";
@@ -185,11 +199,15 @@ public class Magpie4
 				|| findKeyword(statement, "sure") >= 0
 				|| findKeyword(statement, "ok") >= 0
 				|| findKeyword(statement, "okay") >= 0
-				|| findKeyword(statement, "k") >= 0)
+				|| findKeyword(statement, "k") >= 0 )
 		{
-			introduction();
-			response = "Who's your favorite notable men's singles tennis player?";
-			num1 = 1;
+			if (start == 0){
+				introduction();
+				response = "Who's your favorite notable men's singles tennis player?";
+				start ++;
+				num1 = 1;
+			}
+			
 		}
 		else if (findKeyword(statement, "Carlos Alcaraz") >= 0
 				|| findKeyword(statement, "Rafael Nadal") >= 0
@@ -224,21 +242,72 @@ public class Magpie4
 			response = "Any memorable matches?";
 			num ++;
 		}
-		else if (num ==3)
+
+		else if (state1 == true && num ==3){
+			response = "You are feeling positive today. Are you planning on playing tennis?";
+			num ++;
+		}
+		else if (state2 == true && num ==3){
+			response = "You are feeling neutral today. Are you planning on playing tennis to make today or tomorrow a better day?";
+			num ++;
+		}
+		else if (state3 == true && num ==3){
+			response = "You are feeling negative today. Are you planning on playing tennis to make today or tomorrow a better day?";
+			num ++;
+		}
+		else if (state1 == true && num ==4){
+			response = "Great! Hope you make it happen!";
+			num ++;
+		}
+		else if (state2 == true && num ==4){
+			response = "Nice plan. I hope your experience is pleasant.";
+			num ++;
+		}
+		else if (state3 == true && num ==4){
+			response = "Nice plan! Having exercise is the best way to feel better.";
+			num ++;
+		}
+
+		else if (num ==5)
 		{
 			response = "Say something cool";
 			num ++;
 		}
-		else if (num ==4)
+		else if (num ==6)
 		{
 			response = "What do you mean by \"" + statement + "\"?";
 			num ++;
 		}
-		else if (num ==5)
+		else if (num ==7)
 		{
 			response = "Any other sports you like?";
+		}
+
+		else if (state1 == true && num ==7){
+			response = "You are feeling positive today. Are you planning on playing" + statement + "?";
+			num ++;
+		}
+		else if (state2 == true && num ==7){
+			response = "You are feeling neutral today. Are you planning on playing" + statement + "to make today or tomorrow a better day?";
+			num ++;
+		}
+		else if (state3 == true && num ==7){
+			response = "You are feeling negative today. Are you planning on playing" + statement + "to make today or tomorrow a better day?";
+			num ++;
+		}
+		else if (state1 == true && num ==8){
+			response = "Great! Hope you make it happen!";
 			num = 0;
 		}
+		else if (state2 == true && num ==8){
+			response = "Nice plan. I hope your experience is pleasant.";
+			num = 0;
+		}
+		else if (state3 == true && num ==8){
+			response = "Nice plan! Having exercise is the best way to feel better.";
+			num = 0;
+		}
+
 		else if (num1 ==1)
 		{
 			response = "Can you explain who \"" + statement + "\" is?";
@@ -254,19 +323,66 @@ public class Magpie4
 			response = "Any memorable matches?";
 			num1 ++;
 		}
-		else if (num1 ==4)
+		else if (state1 == true && num ==4){
+			response = "You are feeling positive today. Are you planning on playing tennis?";
+			num ++;
+		}
+		else if (state2 == true && num ==4){
+			response = "You are feeling neutral today. Are you planning on playing tennis to make today or tomorrow a better day?";
+			num ++;
+		}
+		else if (state3 == true && num ==4){
+			response = "You are feeling negative today. Are you planning on playing tennis to make today or tomorrow a better day?";
+			num ++;
+		}
+		else if (state1 == true && num ==5){
+			response = "Great! Hope you make it happen!";
+			num ++;
+		}
+		else if (state2 == true && num ==5){
+			response = "Nice plan. I hope your experience is pleasant.";
+			num ++;
+		}
+		else if (state3 == true && num ==5){
+			response = "Nice plan! Having exercise is the best way to feel better.";
+			num ++;
+		}
+		else if (num1 ==6)
 		{
 			response = "Say something cool";
 			num1 ++;
 		}
-		else if (num1 ==5)
+		else if (num1 ==7)
 		{
 			response = "What do you mean by \"" + statement + "\"?";
 			num1 ++;
 		}
-		else if (num1 ==6)
+		else if (num1 ==8)
 		{
 			response = "Any other sports you like?";
+		}
+		else if (state1 == true && num1 ==8){
+			response = "You are feeling positive today. Are you planning on playing" + statement + "?";
+			num1 ++;
+		}
+		else if (state2 == true && num1 ==8){
+			response = "You are feeling neutral today. Are you planning on playing" + statement + "to make today or tomorrow a better day?";
+			num1 ++;
+		}
+		else if (state3 == true && num1 ==8){
+			response = "You are feeling negative today. Are you planning on playing" + statement + "to make today or tomorrow a better day?";
+			num1 ++;
+		}
+		else if (state1 == true && num ==9){
+			response = "Great! Hope you make it happen!";
+			num1 = 0;
+		}
+		else if (state2 == true && num ==9){
+			response = "Nice plan. I hope your experience is pleasant.";
+			num1 = 0;
+		}
+		else if (state3 == true && num ==9){
+			response = "Nice plan! Having exercise is the best way to feel better.";
 			num1 = 0;
 		}
 
@@ -281,12 +397,6 @@ public class Magpie4
 		{
 			response = transformILike(statement);
 		}
-
-		else if (statement.equals("quit")){
-			setState(4);
-
-		}
-
 
 		else
 		{
@@ -303,6 +413,10 @@ public class Magpie4
 			{
 				response = getRandomResponse(statement);
 			}
+		}
+		if (statement.equals("quit")){
+			setState(4);
+
 		}
 		return response;
 	}
@@ -574,14 +688,14 @@ public class Magpie4
     }
   }
 
-  public static double totalSentiment(String fileName) {
+  public static double totalSentiment(String string) {
     List<String> arrayList = new ArrayList<>();
     double score = 0;
-    try {
-      Scanner input = new Scanner(new File(fileName));
-      while (input.hasNextLine()) {
-        String temp = input.nextLine().trim();
-        String[] arrOfStr = temp.split(" ", 100000000);
+    // try {
+    //   Scanner input = new Scanner(new File("cleanSentiment.csv"));
+    //   while (input.hasNextLine()) {
+    //     String temp = input.nextLine().trim();
+        String[] arrOfStr = string.split(" ", 100000000);
         for (String a : arrOfStr) {
           if (a.substring(a.length()-1, a.length()).equals("!")){
             a = a.substring(0, a.length()-1);
@@ -595,13 +709,13 @@ public class Magpie4
           }
           // System.out.println(a);
         }
-      }
-      input.close();
-    }
+    //   }
+    //   input.close();
+    // }
 
-    catch (Exception e) {
-      System.out.println("Error reading or parsing postitiveAdjectives.txt\n" + e);
-    }
+    // catch (Exception e) {
+    //   System.out.println("Error reading or parsing postitiveAdjectives.txt\n" + e);
+    // }
 
     for (int i = 0; i < arrayList.size(); i++) {
       score += sentimentVal(arrayList.get(i));
