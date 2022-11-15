@@ -68,19 +68,25 @@ public class Magpie4
 		switch(currState) {
 			case 1:
 			  state1=true;
-			  System.out.println("Setting state 1 true");
 			  break;
 			case 2:
 			  state2=true;
-			  System.out.println("Setting state 2 true");
 			  break;
 			case 3:
 			  state3=true;
-			  System.out.println("Setting state 3 true");
+			  Scanner in = new Scanner (System.in);
+			  System.out.println("Let's talk about your day. How was your day?");
+			  String answer = in.nextLine();
+			  if (sentimentVal(answer) > 0){
+				System.out.println("Oh that's good for you.");
+			  }
+			  else if (sentimentVal(answer) > 0){
+				System.out.println("To make tomorrow a better day, we need to reflect what we should've done and what we shouldn't have done on that day before ending the day. So, let start that tonight.");
+			  }
 			  break;
 			case 4:
 			  state4=true;
-			  System.out.println("Setting state 4 true");
+			  System.exit(0);
 			  break;
 			case 5:
 			  System.out.println("Done....");
@@ -92,7 +98,7 @@ public class Magpie4
 	
 	public String getGreeting()
 	{
-		return "Hello, I'm a chatbot, and I'm here to have a chat with you. Wanna chat?";
+		return "Hello, I'm a chatbot, and I'm here to have a chat with you. Wanna chat? Type quit to end the conversation";
 	}
 
 	int num = 0;  //when user answers the correct name
@@ -111,15 +117,18 @@ public class Magpie4
 		answer = in.nextLine().toLowerCase();
 		if (sentimentVal(answer) > 1)
 		{
+			setState(1);
 			System.out.println("That's great to hear!");
 		}
-		else if (sentimentVal(answer) < 1 || sentimentVal(answer) > -1)
+		else if (sentimentVal(answer) < 0.4 || sentimentVal(answer) > -0.4)
 		{
-			System.out.println("Neutral");
+			System.out.println("Not bad, I see.");
+			setState(2);
 		}
 		else if (sentimentVal(answer) < 1)
 		{
 			System.out.println("Sorry to hear that, I hope you have a better day tomorrow.");
+			setState(3);
 		}
 		else 
 		{
@@ -137,6 +146,19 @@ public class Magpie4
 		{
 			System.out.println("I don't know much about " + answer + ". Do you want to talk about tennis instead?");
 			answer = in.nextLine().toLowerCase();
+			if (sentimentVal(answer) <= 0)
+			{
+				System.out.println("Why so negative?");
+			}
+			answer = in.nextLine().toLowerCase();
+			if (sentimentVal(answer) < 0)
+			{
+				System.out.println("We are talking about tennis");
+			}
+			else if (sentimentVal(answer) > 0)
+			{
+				System.out.println("You sound better now. Let's talk about tennis");
+			}
 		}
 
 		 //Q4
@@ -258,6 +280,11 @@ public class Magpie4
 		else if (findKeyword(statement, "I like", 0) >= 0)
 		{
 			response = transformILike(statement);
+		}
+
+		else if (statement.equals("quit")){
+			setState(4);
+
 		}
 
 
@@ -453,7 +480,7 @@ public class Magpie4
 		return response;
 	}
 
-	private static HashMap<String, Double> sentiment = new HashMap<String, Double>();
+  private static HashMap<String, Double> sentiment = new HashMap<String, Double>();
   private static ArrayList<String> posAdjectives = new ArrayList<String>();
   private static ArrayList<String> negAdjectives = new ArrayList<String>();
 
@@ -479,7 +506,7 @@ public class Magpie4
       while (input.hasNextLine()) {
         String temp = input.nextLine().trim();
         String[] arrOfStr = temp.split(" ", -2);
-        System.out.println(arrOfStr);
+        // System.out.println(arrOfStr);
         // posAdjectives.add(temp);
       }
       input.close();
@@ -491,7 +518,7 @@ public class Magpie4
       while (input.hasNextLine()) {
         String temp = input.nextLine().trim();
         String[] arrOfStr = temp.split(" ", -2);
-        System.out.println(arrOfStr);
+        // System.out.println(arrOfStr);
         // posAdjectives.add(temp);
       }
       input.close();

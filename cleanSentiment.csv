@@ -70,6 +70,8 @@ adams,0.35
 add,0.22
 added,-0.52
 adding,-0.08
+bad,-1.5
+good,1.5
 addition,-0.03
 additional,0.04
 address,-0.04
@@ -4140,6 +4142,13 @@ politicians,-0.54
 politics,0.07
 pollution,-0.35
 pond,0.17
+great,1.5
+ok,1.5
+fine,1.5
+well,1.5
+calm,1.5
+joyful,1.5
+happy,1.5
 pool,0.22
 poorest,-0.62
 pop,0.91
@@ -4900,6 +4909,14 @@ serve,0.21
 served,0.04
 serves,0.5
 service,0.24
+angry,-1.5
+bad,-1.5
+annoyed,-1.5
+sad,-1.5
+depress,-1.5
+horrible,-1.5
+gloomy,-1.5
+hopeless,-1.5
 services,-0.1
 serving,0.16
 servings,-0.02
